@@ -1,13 +1,41 @@
 import { GameCard } from "./components/GameCard"
-import { GameForm } from "./components/GameForm"
+import { GameForm} from "./components/GameForm"
+import {useEffect} from "react"
+import {useGamesStore} from "./store/useGamesStore"
 import "./App.css"
 
 export default function App() {
+    const {games, getGames} = useGamesStore()
+    const [error, setIsError] = useState<string | null>|(null)
+    const [loading, isetIsLoading] = useState<boolean>(false)
+
+    useEffect(() => {
+    const load = async () => {
+        setIsLoading(true)
+        setIsError(null)
+    try {
+        await getGames()
+    } catch (error) {
+        console.error(error)
+        setIsError('Что-то пошло не так')
+    } finally {
+    setIsLoading(false)
+    }
+    }
+    load()
+    }, [])
+
+    useEffect(() => {
+    console.log(games)
+    }, [games])
+
     return (
         <div className="layout">
             <header className="top">
                 <h1>Игровая полка</h1>
-                <span>0 в коллекции</span>
+                {games?.meta && (
+                    <span>{game?.meta?.pagination.total} в коллекции</span>
+                )}
             </header>
 
             <aside>
@@ -15,14 +43,19 @@ export default function App() {
             </aside>
 
             <main>
-                <p className="error">Ошибка: </p>
-                <p className="hint">Загружаем игры…</p>
-                <p className="hint">
+                {error && <p className="error">Ошибка: </p>}
+                {loading && <p className="hint">Загружаем игры…</p>}
+                {!loading && !error && games?.data && games.data,lenght > 0 ? (
+                    <div className="grid">
+                        {games.data.map((el)=> (
+                    <GameCard key={el.id} {...el} />
+                    ))}
+                </div>
+                ): (
+        <p className="hint">
                     Полка пуста. Добавьте первую игру через форму.
                 </p>
-                <div className="grid">
-                    <GameCard />
-                </div>
+                )}
             </main>
         </div>
     )
