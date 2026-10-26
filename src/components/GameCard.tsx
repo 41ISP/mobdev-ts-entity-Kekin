@@ -3,7 +3,7 @@ import type { IGame} from "..type"
 interface IGameCard extends IGame {
 
 }
-export function GameCard({}: IGameCard) {
+export function GameCard({cover}: IGameCard) {
     return (
         <article className="card">
             <div className="card__cover">

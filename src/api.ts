@@ -4,18 +4,18 @@ export const API_URL = import.meta.env.VITE_API_URL
 const API_KEY = import.meta.env.VITE_API_KEY
 
 export const apiInstanse = axios.create({
-    baseURL: API_URL,
+    baseURL: API_URL + "/api",
     headers: {
         Authorization: `Bearer ${API_KEY}`,
     },
 })
 
 const getGames = async(): Promise<IStrapiResponse<IGame[]>> => {
-    const res = await apiInstanse.get<IStrapiResponse<IGame[]>>("/games") {
+    const res = await apiInstanse.get<IStrapiResponse<IGame[]>>("/games",  {
         params: {
-            populate: "cover",
+            populate: "cover"
         },
-    }
+    })
     return res.data
 }
 

@@ -1,13 +1,13 @@
 import { GameCard } from "./components/GameCard"
 import { GameForm} from "./components/GameForm"
-import {useEffect} from "react"
+import {useEffect, useState} from "react"
 import {useGamesStore} from "./store/useGamesStore"
 import "./App.css"
 
 export default function App() {
     const {games, getGames} = useGamesStore()
-    const [error, setIsError] = useState<string | null>|(null)
-    const [loading, isetIsLoading] = useState<boolean>(false)
+    const [error, setIsError] = useState<string | null>(null)
+    const [loading, setIsLoading] = useState<boolean>(false)
 
     useEffect(() => {
     const load = async () => {
@@ -34,7 +34,7 @@ export default function App() {
             <header className="top">
                 <h1>Игровая полка</h1>
                 {games?.meta && (
-                    <span>{game?.meta?.pagination.total} в коллекции</span>
+                    <span>{games?.meta?.pagination.total} в коллекции</span>
                 )}
             </header>
 
@@ -45,14 +45,14 @@ export default function App() {
             <main>
                 {error && <p className="error">Ошибка: </p>}
                 {loading && <p className="hint">Загружаем игры…</p>}
-                {!loading && !error && games?.data && games.data,lenght > 0 ? (
+                {!loading && !error && games?.data && games.data.lenght > 0 ? (
                     <div className="grid">
                         {games.data.map((el)=> (
                     <GameCard key={el.id} {...el} />
                     ))}
                 </div>
-                ): (
-        <p className="hint">
+                ) : (
+                <p className="hint">
                     Полка пуста. Добавьте первую игру через форму.
                 </p>
                 )}
